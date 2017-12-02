@@ -54,6 +54,7 @@ protected:
 private Q_SLOTS:
   void updateColorAndAlpha();
   void updateHistoryLength();
+  void updateQueueSize();
 
   // Function to handle an incoming ROS message.
 private:
@@ -62,10 +63,17 @@ private:
   // Storage for the list of visuals.  It is a circular buffer where
   // data gets popped from the front (oldest) and pushed to the back (newest)
   // User-editable property variables.
+
+
   rviz::ColorProperty* color_property_;
   rviz::FloatProperty* alpha_property_;
+
   rviz::IntProperty* history_length_property_;
-  std::shared_ptr<CamWidgetVisual> p_visual_;
+  rviz::IntProperty* queue_size_property_;
+
+  std::deque<std::shared_ptr<CamWidgetVisual>> p_visual_history_;
+  int visual_history_maxsize_;
+  //std::shared_ptr<CamWidgetVisual> p_visual_;
 };
 // END_TUTORIAL
 

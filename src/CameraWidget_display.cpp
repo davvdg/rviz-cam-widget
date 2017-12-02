@@ -34,12 +34,21 @@ CamWidgetDisplay::CamWidgetDisplay()
                                              "0 is fully transparent, 1.0 is fully opaque.",
                                              this, SLOT( updateColorAndAlpha() ));
 
+
+  */
+  queue_size_property_ = new rviz::IntProperty( "Queue Size", 10,
+                                                "Number of prior measurements to display.",
+                                                  this, SLOT( updateQueueSize() ));
+  queue_size_property_->setMin( 1 );
   history_length_property_ = new rviz::IntProperty( "History Length", 1,
                                                     "Number of prior measurements to display.",
                                                     this, SLOT( updateHistoryLength() ));
+
+
   history_length_property_->setMin( 1 );
   history_length_property_->setMax( 100000 );
-  */
+  //updateQueueSize();
+ 
   return;
 }
 
@@ -58,16 +67,17 @@ void CamWidgetDisplay::onInitialize()
   
   MFDClass::onInitialize();
   Ogre::Quaternion orientation( 0.0, 0.0, 0.0, 1.0);
-  Ogre::Vector3 position(0.0, 0.0, 0.0);  
-  p_visual_ = std::make_shared<CamWidgetVisual>( context_->getSceneManager(), scene_node_ );
+  Ogre::Vector3 position(0.0, 0.0, 0.0);
+
+  //p_visual_ = std::make_shared<CamWidgetVisual>( context_->getSceneManager(), scene_node_ );
 
   //visual.setColor( 1.0, 1.0, 1.0, 1.0 );
   //visual.setFrameOrientation( orientation );
   //visual.setFramePosition( position );
 
-  /*
+  updateQueueSize();
   updateHistoryLength();
-  */
+  
 
   return;
 }
@@ -96,9 +106,22 @@ void CamWidgetDisplay::updateColorAndAlpha()
   return;
 }
 
+void CamWidgetDisplay::updateQueueSize() {
+  int queueSize = queue_size_property_->getInt();
+  tf_filter_->setQueueSize((uint32_t)queueSize);
+}
+
 // Set the number of past visuals to show.
 void CamWidgetDisplay::updateHistoryLength()
 {
+  visual_history_maxsize_ = history_length_property_->getInt();
+  if (p_visual_history_.size() > visual_history_maxsize_) {
+    int numItemToRemove = p_visual_history_.size() - visual_history_maxsize_;
+    while (numItemToRemove) {
+      p_visual_history_.pop_front();
+      numItemToRemove--;
+    }
+  }
   return;
 }
 void CamWidgetDisplay::processMessage( const sensor_msgs::CameraInfo::ConstPtr& msg ) {
@@ -114,14 +137,29 @@ void CamWidgetDisplay::processMessage( const sensor_msgs::CameraInfo::ConstPtr& 
                msg->header.frame_id.c_str(), qPrintable( fixed_frame_ ));
     return;
   }
+
+  std::cout << p_visual_history_.size() << std::endl;
+  if (p_visual_history_.size() >= visual_history_maxsize_) {
+    //delete *p_visual_history_.front();
+    p_visual_history_.pop_front();
+  }
+  std::shared_ptr<CamWidgetVisual> visual = std::make_shared<CamWidgetVisual>( context_->getSceneManager(), scene_node_ );
+  //CamWidgetVisual visual( context_->getSceneManager(), scene_node_ );   
+  p_visual_history_.push_back(visual);
+
   //p_visual_->setMessage( msg );
-  p_visual_->setFramePosition( position );
-  p_visual_->setFrameOrientation( orientation );
+  //p_visual_->setFramePosition( position );
+  //p_visual_->setFrameOrientation( orientation );
+
+  visual->setFramePosition( position );
+  visual->setFrameOrientation( orientation );
+
 
   float foc_x = msg->K[0] / ((float)(msg->width) * 2.0) ;
   float foc_y = msg->K[4] / ((float)(msg->height) * 2.0);
+  visual->setCameraFoc(foc_x, foc_y);
 
-  p_visual_->setCameraFoc(foc_x, foc_y);
+  //p_visual_->setCameraFoc(foc_x, foc_y);
 
   return;
 }

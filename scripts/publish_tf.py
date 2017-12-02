@@ -10,9 +10,9 @@ import math
 def talker():
     br = tf.TransformBroadcaster()
     rospy.init_node('talker', anonymous=True)
-    rate = rospy.Rate(100) # 10hz
+    rate = rospy.Rate(1) # 10hz
     while not rospy.is_shutdown():
-        t = (rospy.get_time() / (2* math.pi)) * 6.0
+        t = (rospy.get_time() / (2* math.pi)) * 600
         print t
 
         br.sendTransform((0,0,0),

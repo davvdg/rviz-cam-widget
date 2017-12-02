@@ -90,6 +90,7 @@ CamWidgetVisual::~CamWidgetVisual()
   delete l_l_;
 
   scene_manager_->destroySceneNode( frame_node_ );
+  std::cout << "got detroyed" << std::endl; 
 }
 
 // Position and orientation are passed through to the SceneNode.
