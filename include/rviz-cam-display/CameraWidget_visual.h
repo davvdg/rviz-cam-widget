@@ -72,6 +72,7 @@ public:
   void setFramePosition( const Ogre::Vector3& position );
   void setFrameOrientation( const Ogre::Quaternion& orientation );
   void setCameraFoc(float foc_x, float foc_y);
+  void setScale(float scale);
 
   // Set the color and alpha of the visual, which are user-editable
   // parameters and therefore don't come from the Imu message.

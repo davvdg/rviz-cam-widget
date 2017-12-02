@@ -53,6 +53,7 @@ protected:
   // These Qt slots get connected to signals indicating changes in the user-editable properties.
 private Q_SLOTS:
   void updateColorAndAlpha();
+  void updateScale();
   void updateHistoryLength();
   void updateQueueSize();
 
@@ -70,6 +71,9 @@ private:
 
   rviz::IntProperty* history_length_property_;
   rviz::IntProperty* queue_size_property_;
+
+  rviz::FloatProperty* scale_property_;
+  float scale_;
 
   std::deque<std::shared_ptr<CamWidgetVisual>> p_visual_history_;
   int visual_history_maxsize_;

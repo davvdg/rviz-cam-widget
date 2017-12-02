@@ -125,6 +125,11 @@ void CamWidgetVisual::setCameraFoc(float foc_x, float foc_y) {
 
   return;
 }
+
+void CamWidgetVisual::setScale(float scale) {
+  frame_node_->setScale( scale, scale, scale );
+  return;
+}
 /*
 // Color is passed through to the Arrow object.
 void CamWidgetVisual::setColor( float r, float g, float b, float a )

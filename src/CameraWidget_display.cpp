@@ -37,16 +37,20 @@ CamWidgetDisplay::CamWidgetDisplay()
 
   */
   queue_size_property_ = new rviz::IntProperty( "Queue Size", 10,
-                                                "Number of prior measurements to display.",
+                                                "Number of cam info messages to cache for tf to be available.",
                                                   this, SLOT( updateQueueSize() ));
   queue_size_property_->setMin( 1 );
   history_length_property_ = new rviz::IntProperty( "History Length", 1,
-                                                    "Number of prior measurements to display.",
+                                                    "Number of prior camera to display.",
                                                     this, SLOT( updateHistoryLength() ));
-
-
   history_length_property_->setMin( 1 );
   history_length_property_->setMax( 100000 );
+
+  scale_property_ = new rviz::FloatProperty( "Widget Size", 1.0f,
+                                             "Scale of the camera displayed",
+                                             this, SLOT( updateScale() ));
+
+  scale_property_->setMin( 0 );
   //updateQueueSize();
  
   return;
@@ -77,7 +81,7 @@ void CamWidgetDisplay::onInitialize()
 
   updateQueueSize();
   updateHistoryLength();
-  
+  updateScale();
 
   return;
 }
@@ -103,6 +107,19 @@ void CamWidgetDisplay::updateColorAndAlpha()
   float alpha = alpha_property_->getFloat();
   Ogre::ColourValue color = color_property_->getOgreColor();
   */
+  return;
+}
+
+void CamWidgetDisplay::updateScale()
+{
+  scale_ = scale_property_->getFloat();
+
+  std::deque<std::shared_ptr<CamWidgetVisual>>::iterator it = p_visual_history_.begin();
+  while (it != p_visual_history_.end()) {
+    (*it)->setScale(scale_);
+    *it++;
+  }
+
   return;
 }
 
@@ -153,6 +170,7 @@ void CamWidgetDisplay::processMessage( const sensor_msgs::CameraInfo::ConstPtr& 
 
   visual->setFramePosition( position );
   visual->setFrameOrientation( orientation );
+  visual->setScale( scale_ );
 
 
   float foc_x = msg->K[0] / ((float)(msg->width) * 2.0) ;
