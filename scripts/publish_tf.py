@@ -3,7 +3,6 @@ import roslib
 import rospy
 
 import tf
-import turtlesim.msg
 
 import math
 

@@ -77,6 +77,7 @@ private:
 
   std::deque<std::shared_ptr<CamWidgetVisual>> p_visual_history_;
   int visual_history_maxsize_;
+  Ogre::ColourValue color_;
   //std::shared_ptr<CamWidgetVisual> p_visual_;
 };
 // END_TUTORIAL

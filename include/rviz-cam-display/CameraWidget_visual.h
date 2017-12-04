@@ -31,6 +31,7 @@
 #define IMU_VISUAL_H
 
 #include <sensor_msgs/CameraInfo.h>
+#include <rviz/ogre_helpers/line.h>
 
 namespace Ogre
 {
@@ -38,13 +39,25 @@ class Vector3;
 class Quaternion;
 }
 
+/*
 namespace rviz
 {
 class Line;
 }
-
+*/
 namespace cam_display
 {
+
+class SelfIllumLine: public rviz::Line
+{
+public:
+  SelfIllumLine( 
+    Ogre::SceneManager * manager,
+    Ogre::SceneNode * parent_node = NULL 
+  );
+
+  void setColor(const Ogre::ColourValue& c );
+};
 
 // BEGIN_TUTORIAL
 // Declare the visual class for this display.

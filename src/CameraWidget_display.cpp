@@ -25,11 +25,11 @@ namespace cam_display
 // constructor the parameters it needs to fully initialize.
 CamWidgetDisplay::CamWidgetDisplay()
 {
-  /*
-  color_property_ = new rviz::ColorProperty( "Color", QColor( 204, 51, 204 ),
-                                             "Color to draw the acceleration arrows.",
+  
+  color_property_ = new rviz::ColorProperty( "Color", QColor( 255, 255, 255 ),
+                                             "Color to draw the cameras.",
                                              this, SLOT( updateColorAndAlpha() ));
-
+  /*
   alpha_property_ = new rviz::FloatProperty( "Alpha", 1.0,
                                              "0 is fully transparent, 1.0 is fully opaque.",
                                              this, SLOT( updateColorAndAlpha() ));
@@ -82,7 +82,7 @@ void CamWidgetDisplay::onInitialize()
   updateQueueSize();
   updateHistoryLength();
   updateScale();
-
+  updateColorAndAlpha();
   return;
 }
 
@@ -103,10 +103,15 @@ void CamWidgetDisplay::reset()
 // Set the current color and alpha values for each visual.
 void CamWidgetDisplay::updateColorAndAlpha()
 {
-  /*
-  float alpha = alpha_property_->getFloat();
-  Ogre::ColourValue color = color_property_->getOgreColor();
-  */
+  
+  float alpha = 1.0f;
+  color_ = color_property_->getOgreColor();
+  std::deque<std::shared_ptr<CamWidgetVisual>>::iterator it = p_visual_history_.begin();
+  while (it != p_visual_history_.end()) {
+    (*it)->setColor(color_.r, color_.g, color_.b, alpha);
+    *it++;
+  }  
+  
   return;
 }
 
@@ -145,7 +150,7 @@ void CamWidgetDisplay::processMessage( const sensor_msgs::CameraInfo::ConstPtr& 
 
   Ogre::Quaternion orientation;
   Ogre::Vector3 position;
-  std::cout << msg->header.frame_id << std::endl;
+  //std::cout << msg->header.frame_id << std::endl;
   if( !context_->getFrameManager()->getTransform( msg->header.frame_id,
                                                   msg->header.stamp,
                                                   position, orientation ))
@@ -155,7 +160,7 @@ void CamWidgetDisplay::processMessage( const sensor_msgs::CameraInfo::ConstPtr& 
     return;
   }
 
-  std::cout << p_visual_history_.size() << std::endl;
+  //std::cout << p_visual_history_.size() << std::endl;
   if (p_visual_history_.size() >= visual_history_maxsize_) {
     //delete *p_visual_history_.front();
     p_visual_history_.pop_front();
@@ -171,6 +176,7 @@ void CamWidgetDisplay::processMessage( const sensor_msgs::CameraInfo::ConstPtr& 
   visual->setFramePosition( position );
   visual->setFrameOrientation( orientation );
   visual->setScale( scale_ );
+  visual->setColor(color_.r, color_.g, color_.b, 1.0f);
 
 
   float foc_x = msg->K[0] / ((float)(msg->width) * 2.0) ;

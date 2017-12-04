@@ -38,6 +38,20 @@
 namespace cam_display
 {
 
+SelfIllumLine::SelfIllumLine( 
+    Ogre::SceneManager * manager,
+    Ogre::SceneNode * parent_node
+  ): rviz::Line(manager, parent_node)
+{
+  //manual_object_material_->getTechnique(0)->setLightingEnabled(true);
+  return;
+}
+
+
+void SelfIllumLine::setColor(const Ogre::ColourValue& c ) {
+  manual_object_material_->getTechnique(0)->setSelfIllumination( c );
+}
+
 // BEGIN_TUTORIAL
 CamWidgetVisual::CamWidgetVisual( Ogre::SceneManager* scene_manager, Ogre::SceneNode* parent_node )
 {
@@ -59,19 +73,19 @@ CamWidgetVisual::CamWidgetVisual( Ogre::SceneManager* scene_manager, Ogre::Scene
 
 
 
-  tll_ = new rviz::Line(scene_manager, frame_node_);
-  trl_ = new rviz::Line(scene_manager, frame_node_);
-  brl_ = new rviz::Line(scene_manager, frame_node_);
-  bll_ = new rviz::Line(scene_manager, frame_node_);
-  t_l_ = new rviz::Line(scene_manager, frame_node_);
-  l_l_ = new rviz::Line(scene_manager, frame_node_);
-  b_l_ = new rviz::Line(scene_manager, frame_node_);
-  r_l_ = new rviz::Line(scene_manager, frame_node_);
+  tll_ = new SelfIllumLine(scene_manager, frame_node_);
+  trl_ = new SelfIllumLine(scene_manager, frame_node_);
+  brl_ = new SelfIllumLine(scene_manager, frame_node_);
+  bll_ = new SelfIllumLine(scene_manager, frame_node_);
+  t_l_ = new SelfIllumLine(scene_manager, frame_node_);
+  l_l_ = new SelfIllumLine(scene_manager, frame_node_);
+  b_l_ = new SelfIllumLine(scene_manager, frame_node_);
+  r_l_ = new SelfIllumLine(scene_manager, frame_node_);
 
 
 
 
-  std::cout << frame_node_->numChildren() << std::endl;
+  //std::cout << frame_node_->numChildren() << std::endl;
 
 }
 
@@ -90,7 +104,7 @@ CamWidgetVisual::~CamWidgetVisual()
   delete l_l_;
 
   scene_manager_->destroySceneNode( frame_node_ );
-  std::cout << "got detroyed" << std::endl; 
+  //std::cout << "got detroyed" << std::endl; 
 }
 
 // Position and orientation are passed through to the SceneNode.
@@ -130,13 +144,24 @@ void CamWidgetVisual::setScale(float scale) {
   frame_node_->setScale( scale, scale, scale );
   return;
 }
-/*
+
 // Color is passed through to the Arrow object.
 void CamWidgetVisual::setColor( float r, float g, float b, float a )
 {
-  acceleration_arrow_->setColor( r, g, b, a );
+
+  tll_->setColor(r,g,b,a);
+  trl_->setColor(r,g,b,a);
+  brl_->setColor(r,g,b,a);
+  bll_->setColor(r,g,b,a);
+
+  t_l_->setColor(r,g,b,a);
+  r_l_->setColor(r,g,b,a);
+  b_l_->setColor(r,g,b,a);
+  l_l_->setColor(r,g,b,a);
+
+
 }
 // END_TUTORIAL
-*/
+
 } // end namespace rviz_plugin_tutorials
 
