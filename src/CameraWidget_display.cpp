@@ -181,7 +181,7 @@ void CamWidgetDisplay::processMessage( const sensor_msgs::CameraInfo::ConstPtr& 
 
   float foc_x = msg->K[0] / ((float)(msg->width) * 2.0) ;
   float foc_y = msg->K[4] / ((float)(msg->height) * 2.0);
-  visual->setCameraFoc(foc_x, foc_y);
+  visual->setCameraFoc(foc_y, foc_x);
 
   //p_visual_->setCameraFoc(foc_x, foc_y);
 
