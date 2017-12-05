@@ -10,9 +10,9 @@
 #include <rviz/properties/int_property.h>
 #include <rviz/frame_manager.h>
 
-#include "rviz-cam-display/CameraWidget_visual.h"
+#include "rviz_cam_display/CameraWidget_visual.h"
 
-#include "rviz-cam-display/CameraWidget_display.h"
+#include "rviz_cam_display/CameraWidget_display.h"
 
 
 

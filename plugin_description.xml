@@ -1,4 +1,4 @@
-<library path="lib/librviz-cam-display">
+<library path="lib/librviz_cam_display">
    <class name="cam_display/CamWidgetDisplay"
          type="cam_display::CamWidgetDisplay"
          base_class_type="rviz::Display">

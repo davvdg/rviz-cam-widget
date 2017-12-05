@@ -33,7 +33,7 @@
 
 #include <rviz/ogre_helpers/line.h>
 
-#include "rviz-cam-display/CameraWidget_visual.h"
+#include "rviz_cam_display/CameraWidget_visual.h"
 
 namespace cam_display
 {

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(rviz-cam-display)
+project(rviz_cam_display)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
@@ -38,8 +38,8 @@ add_definitions(-DQT_NO_KEYWORDS)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  INCLUDE_DIRS include/rviz-cam-display
-  LIBRARIES rviz-cam-display
+  INCLUDE_DIRS include/rviz_cam_display
+  LIBRARIES rviz_cam_display
   CATKIN_DEPENDS roscpp rviz
 #  DEPENDS system_lib
 )
@@ -58,7 +58,7 @@ include_directories(
 )
 
 
-qt5_wrap_cpp(MOC_FILES include/rviz-cam-display/CameraWidget_display.h)
+qt5_wrap_cpp(MOC_FILES include/rviz_cam_display/CameraWidget_display.h)
 
 set(SOURCE_FILES
   src/CameraWidget_visual.cpp
@@ -79,7 +79,7 @@ add_library(${PROJECT_NAME}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/rviz-cam-display_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/rviz_cam_display_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -138,7 +138,7 @@ install(TARGETS ${PROJECT_NAME}
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_rviz-cam-display.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_rviz_cam_display.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

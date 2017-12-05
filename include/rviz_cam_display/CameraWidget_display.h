@@ -7,7 +7,7 @@
 */
 #include <sensor_msgs/CameraInfo.h>
 #include <rviz/message_filter_display.h>
-#include "rviz-cam-display/CameraWidget_visual.h"
+#include "rviz_cam_display/CameraWidget_visual.h"
 
 namespace Ogre
 {
