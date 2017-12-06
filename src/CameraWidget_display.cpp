@@ -177,11 +177,11 @@ void CamWidgetDisplay::processMessage( const sensor_msgs::CameraInfo::ConstPtr& 
   visual->setFrameOrientation( orientation );
   visual->setScale( scale_ );
   visual->setColor(color_.r, color_.g, color_.b, 1.0f);
-
-
-  float foc_x = ((float)(msg->width) / (msg->K[0] * 2.0)) ;
-  float foc_y = ((float)(msg->height) / (msg->K[4] * 2.0));
-  visual->setCameraFoc(foc_x, foc_y);
+  visual->setProjection(msg->K[0], msg->K[4], msg->K[2], msg->K[5], msg->K[1], msg->width, msg->height);
+  ROS_ASSERT_MSG(msg->K[3] == 0., "Unexpected projection matrix, K[3] = %lf", msg->K[3]);
+  ROS_ASSERT_MSG(msg->K[6] == 0., "Unexpected projection matrix, K[6] = %lf", msg->K[6]);
+  ROS_ASSERT_MSG(msg->K[7] == 0., "Unexpected projection matrix, K[7] = %lf", msg->K[7]);
+  ROS_ASSERT_MSG(msg->K[8] == 1., "Unexpected projection matrix, K[8] = %lf", msg->K[8]);
 
   //p_visual_->setCameraFoc(foc_x, foc_y);
 

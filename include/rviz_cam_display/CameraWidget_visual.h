@@ -84,7 +84,7 @@ public:
   // responsible for visualization.
   void setFramePosition( const Ogre::Vector3& position );
   void setFrameOrientation( const Ogre::Quaternion& orientation );
-  void setCameraFoc(float foc_x, float foc_y);
+  void setProjection(double fx, double fy, double px, double py, double s, int w, int h);
   void setScale(float scale);
 
   // Set the color and alpha of the visual, which are user-editable

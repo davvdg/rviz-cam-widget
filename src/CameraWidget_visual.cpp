@@ -120,11 +120,19 @@ void CamWidgetVisual::setFrameOrientation( const Ogre::Quaternion& orientation )
   return;
 }
 
-void CamWidgetVisual::setCameraFoc(float foc_x, float foc_y) {
-  Ogre::Vector3 tl(  foc_x,  foc_y, 1.0 );
-  Ogre::Vector3 tr( -foc_x,  foc_y, 1.0 );
-  Ogre::Vector3 br( -foc_x, -foc_y, 1.0 );
-  Ogre::Vector3 bl(  foc_x, -foc_y, 1.0 );
+void CamWidgetVisual::setProjection(double fx, double fy, double px, double py, double s, int w, int h) {
+  float y0 = -py/fy;
+  float y1 = (h-py)/fy;
+  float x0 = -px/fx;
+  float x1 = (w-px)/fx;
+  float sfx = s/fx;
+  float s0 = y0*sfx;
+  float s1 = y1*sfx;
+
+  Ogre::Vector3 tl( x1-s1, y1, 1.0 );
+  Ogre::Vector3 tr( x0-s1, y1, 1.0 );
+  Ogre::Vector3 br( x0-s0, y0, 1.0 );
+  Ogre::Vector3 bl( x1-s0, y0, 1.0 );
   Ogre::Vector3  o(  0.0,  0.0, 0.0 );
 
   tll_->setPoints(o, tl);
