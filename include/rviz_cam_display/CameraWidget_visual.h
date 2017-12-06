@@ -86,6 +86,7 @@ public:
   void setFrameOrientation( const Ogre::Quaternion& orientation );
   void setProjection(double fx, double fy, double px, double py, double s, int w, int h);
   void setScale(float scale);
+  void setPyramidVisibility(bool pyramidVisibility);
 
   // Set the color and alpha of the visual, which are user-editable
   // parameters and therefore don't come from the Imu message.
@@ -97,6 +98,7 @@ private:
   // A SceneNode whose pose is set to match the coordinate frame of
   // the Imu message header.
   Ogre::SceneNode* frame_node_;
+  Ogre::SceneNode* pyramid_node_;
 
   // The SceneManager, kept here only so the destructor can ask it to
   // destroy the ``frame_node_``.

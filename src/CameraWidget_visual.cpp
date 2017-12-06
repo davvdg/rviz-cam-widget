@@ -66,6 +66,7 @@ CamWidgetVisual::CamWidgetVisual( Ogre::SceneManager* scene_manager, Ogre::Scene
   // relative to the RViz fixed frame.
 
   frame_node_ = parent_node->createChildSceneNode();
+  pyramid_node_ = frame_node_->createChildSceneNode();
 
   // We create the arrow object within the frame node so that we can
   // set its position and direction relative to its header frame.
@@ -73,10 +74,10 @@ CamWidgetVisual::CamWidgetVisual( Ogre::SceneManager* scene_manager, Ogre::Scene
 
 
 
-  tll_ = new SelfIllumLine(scene_manager, frame_node_);
-  trl_ = new SelfIllumLine(scene_manager, frame_node_);
-  brl_ = new SelfIllumLine(scene_manager, frame_node_);
-  bll_ = new SelfIllumLine(scene_manager, frame_node_);
+  tll_ = new SelfIllumLine(scene_manager, pyramid_node_);
+  trl_ = new SelfIllumLine(scene_manager, pyramid_node_);
+  brl_ = new SelfIllumLine(scene_manager, pyramid_node_);
+  bll_ = new SelfIllumLine(scene_manager, pyramid_node_);
   t_l_ = new SelfIllumLine(scene_manager, frame_node_);
   l_l_ = new SelfIllumLine(scene_manager, frame_node_);
   b_l_ = new SelfIllumLine(scene_manager, frame_node_);
@@ -102,7 +103,7 @@ CamWidgetVisual::~CamWidgetVisual()
   delete r_l_;
   delete b_l_;
   delete l_l_;
-
+  scene_manager_->destroySceneNode( pyramid_node_ );
   scene_manager_->destroySceneNode( frame_node_ );
   //std::cout << "got detroyed" << std::endl; 
 }
@@ -117,6 +118,11 @@ void CamWidgetVisual::setFramePosition( const Ogre::Vector3& position )
 void CamWidgetVisual::setFrameOrientation( const Ogre::Quaternion& orientation )
 {
   frame_node_->setOrientation( orientation );
+  return;
+}
+
+void CamWidgetVisual::setPyramidVisibility(bool pyramidVisibility) {
+  pyramid_node_->setVisible(pyramidVisibility);
   return;
 }
 

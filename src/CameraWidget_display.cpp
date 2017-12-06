@@ -29,6 +29,11 @@ CamWidgetDisplay::CamWidgetDisplay()
   color_property_ = new rviz::ColorProperty( "Color", QColor( 255, 255, 255 ),
                                              "Color to draw the cameras.",
                                              this, SLOT( updateColorAndAlpha() ));
+  
+  pyramid_visibility_property_ = new rviz::BoolProperty( "Show Pyramid", true,
+                                             "Display the pyramid line of the frustum.",
+                                             this, SLOT( updatePyramidVisibility() ));
+
   /*
   alpha_property_ = new rviz::FloatProperty( "Alpha", 1.0,
                                              "0 is fully transparent, 1.0 is fully opaque.",
@@ -83,6 +88,7 @@ void CamWidgetDisplay::onInitialize()
   updateHistoryLength();
   updateScale();
   updateColorAndAlpha();
+  updatePyramidVisibility();
   return;
 }
 
@@ -112,6 +118,17 @@ void CamWidgetDisplay::updateColorAndAlpha()
     *it++;
   }  
   
+  return;
+}
+
+void CamWidgetDisplay::updatePyramidVisibility() {
+  pyramid_visibility_ = pyramid_visibility_property_->getBool();
+  std::deque<std::shared_ptr<CamWidgetVisual>>::iterator it = p_visual_history_.begin();
+  while (it != p_visual_history_.end()) {
+    (*it)->setPyramidVisibility(pyramid_visibility_);
+    *it++;
+  }
+
   return;
 }
 
@@ -178,6 +195,8 @@ void CamWidgetDisplay::processMessage( const sensor_msgs::CameraInfo::ConstPtr& 
   visual->setScale( scale_ );
   visual->setColor(color_.r, color_.g, color_.b, 1.0f);
   visual->setProjection(msg->K[0], msg->K[4], msg->K[2], msg->K[5], msg->K[1], msg->width, msg->height);
+  visual->setPyramidVisibility(pyramid_visibility_);
+  
   ROS_ASSERT_MSG(msg->K[3] == 0., "Unexpected projection matrix, K[3] = %lf", msg->K[3]);
   ROS_ASSERT_MSG(msg->K[6] == 0., "Unexpected projection matrix, K[6] = %lf", msg->K[6]);
   ROS_ASSERT_MSG(msg->K[7] == 0., "Unexpected projection matrix, K[7] = %lf", msg->K[7]);

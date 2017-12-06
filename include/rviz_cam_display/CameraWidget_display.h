@@ -56,6 +56,7 @@ private Q_SLOTS:
   void updateScale();
   void updateHistoryLength();
   void updateQueueSize();
+  void updatePyramidVisibility();
 
   // Function to handle an incoming ROS message.
 private:
@@ -64,11 +65,11 @@ private:
   // Storage for the list of visuals.  It is a circular buffer where
   // data gets popped from the front (oldest) and pushed to the back (newest)
   // User-editable property variables.
-
+  bool pyramid_visibility_;
 
   rviz::ColorProperty* color_property_;
   rviz::FloatProperty* alpha_property_;
-
+  rviz::BoolProperty* pyramid_visibility_property_;
   rviz::IntProperty* history_length_property_;
   rviz::IntProperty* queue_size_property_;
 
